@@ -1,15 +1,27 @@
-Az IP-cím (Internet Protocol-cím) egy egyedi (hálózati) azonosító, amelyet az internetprotokoll segítségével kommunikáló számítógépek egymás azonosítására használnak. Minden, az internetre kapcsolt számítógépnek van IP-címe, de egy-egy konkrét cím nem kötődik feltétlenül egy-egy géphez.
+Az IP-cím (Internet Protocol-cím) egy egyedi (hálózati) azonosító, amelyet az internetprotokoll segítségével kommunikáló számítógépek egymás azonosítására használnak.
 
-
-
-Az útválasztónak kell eldöntenie, hogy egy adott csomagnak merre kell tovább mennie. Ebben a feladatban rendelkezésre áll a cél IP cím, ill. egy belsõ táblázat, a routing tábla.
 
 Minden egyes hálózati eszköz kap egy IP címet, tehát ha a routerünknek két interface-e van, akkor neki két IP hálózatra van kijárása, számára két szegmensen is vannak közvetlenül elérhetõ hostok.
 
-Így a routerünk meg tudja címezni mindkét IP szegmenst valamelyik eszközén  keresztül. A megfelelõ eszköz keresése valahogy úgy zajlik, hogy az elsõ olyan routing bejegyzés eszköz mezõje hivatkozik a keresett eszközre, aminek a tartományába a célcím beleesik.
-Van egy harmadik oszlop, ami a fenti két bejegyzésnél üres. Ezt az oszlopot használhatjuk fel annak megjelölésére, hogy a célcím nem lokálisan elérhetõ, de az adott szegmensen található gateway már tudja az utat a cél felé. Ilyen módon a gateway-ek összeláncolhatók.
 
-Ilyen módon épül fel az egész internet, minden kis helyi hálózat továbbitja a nem helyi packeteit egy olyannak, aki már tudja merre kell azt továbbítani.
+amely később beleépük a forgalomirányitó  routing táblájába
+Az útválasztónak kell eldöntenie, hogy egy adott csomagnak merre kell tovább mennie. Ebben a feladatban rendelkezésre áll a cél IP cím, ill. egy belsõ táblázat, a routing tábla.
 
-A hálózaton nem csak a host-okat (számítógépeket, munkaállomásokat) azonosítják IP címmel, hanem a hálózatokat is. Egy IP szegmenst a network címe azonosít. Egy host neve úgy áll össze, hogy a cím elején levõ bitek határozzák meg a hálózat címét, a fennmaradó bitek pedig a host-ot azonosítják a hálózaton belül. Az, hogy melyik rész a network cím, és melyik azonosítja a host-ot a netmask határozza meg.
-A címnek azon bitjei, amiken a netmask bitjei 1-et tartalmaznak, a network címet határozzák meg, a fennmaradó bitek pedig a network-ön belüli hostcímet adják meg.
+
+
+Egy nagyon rövid összefoglaló arról, hogy mi történik a folyamatban:
+
+Az ügyfél IP-címet kér a gazdagépről. Az ügyfél bármilyen eszköz lehet, amely elküldi a kérelmet, és a gazdagép lehet egy útválasztó.
+A gazdagép megkeresi a rendelkezésre álló IP-címet, és hozzárendelte azt az ügyfélhez.
+Ezen IP-cím használatával az ügyfél képes lesz kommunikálni a hálózaton.
+
+
+Most nézzük meg részletesebben ezt a folyamatot. Az alább említett lépések mélyreható képet adnak róla -
+
+A DHCP-kiszolgálóval hálózathoz csatlakoztatott eszköz által küldött kérést DHCPDISCOVER-kérelemnek hívják.
+Ezt a kérést a DHCP szervernek DISCOVER nevû csomag formájában küldjük el. Amint ezt a csomagot megkapja a DHCP szerver, a szerver megkeresi az eszköz használatához egy IP címet. Miután megtalálta, a kiszolgáló válaszol, küldve egy csomagot a DHCPOFFER nevû kliensnek.
+Az eszköznek vagy az ügyfélnek most válaszolnia kell a kiszolgálóra egy DHCPREQUEST nevű csomaggal, a választott IP-cím elfogadásával. Ehhez a csomaghoz a szerver nyugtázást (ACK) küld, amely megerősíti, hogy az eszköz mostantól képes használni az adott IP-címet. Azt is megadja az adott IP-cím érvényességét, hogy az eszköz pontosan tudja, mikor kell új IP-címet szereznie.
+Azokban az esetekben, amikor a szerver nem akarja, hogy az eszköz megkapja az adott IP-címet, NAC elküldésével nem ismeri el az eszköz kérését.
+Bár az említett lépések nagyon hosszú időt vesznek igénybe, ám ezek gyakorlatilag olyan gyorsan megtörténnek, hogy az még csak nem is valósul meg. Természetesen nincs szükség technikai részletekre a folyamatról, és még mindig elolvashatja az IP-címet a DHCP szerverről.
+
+
